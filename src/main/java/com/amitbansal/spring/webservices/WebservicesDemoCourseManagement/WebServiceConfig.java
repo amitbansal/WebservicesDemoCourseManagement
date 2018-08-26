@@ -1,11 +1,22 @@
 package com.amitbansal.spring.webservices.WebservicesDemoCourseManagement;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.security.auth.callback.CallbackHandler;
+
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ws.config.annotation.EnableWs;
+import org.springframework.ws.config.annotation.WsConfigurerAdapter;
+import org.springframework.ws.server.EndpointInterceptor;
+
+import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
+import org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
@@ -15,7 +26,7 @@ import org.springframework.xml.xsd.XsdSchema;
 // Enable spring webservices
 @Configuration
 @EnableWs
-public class WebServiceConfig {
+public class WebServiceConfig extends WsConfigurerAdapter{
 	// Message dispatcher servlet
 	// spring application context
 	// url */
@@ -48,6 +59,34 @@ public class WebServiceConfig {
 	XsdSchema courseSchema(){
 		return new SimpleXsdSchema(new ClassPathResource("course-details.xsd"));
 	}
+	
+	//xwsSecurityInterceptor
+		// callback handler for validating user name password
+		// security policy
+	// add interceptor
+	
+	
+	@Bean
+	public XwsSecurityInterceptor securityInterceptor(){
+		XwsSecurityInterceptor securityInterceptor = new XwsSecurityInterceptor();
+		securityInterceptor.setCallbackHandler(callbackHandler());
+		securityInterceptor.setPolicyConfiguration(new ClassPathResource("securityPolicy.xml"));
+		return securityInterceptor;
+	}
+
+	@Bean
+	public  SimplePasswordValidationCallbackHandler callbackHandler() {
+		// TODO Auto-generated method stub
+		SimplePasswordValidationCallbackHandler handler = new SimplePasswordValidationCallbackHandler();
+		handler.setUsersMap(Collections.singletonMap("user", "password"));
+		return handler;
+	}
+
+	@Override
+	public void addInterceptors(List<EndpointInterceptor> interceptors) {
+		// TODO Auto-generated method stub
+		interceptors.add(securityInterceptor());
+	}	
 	
 }
 

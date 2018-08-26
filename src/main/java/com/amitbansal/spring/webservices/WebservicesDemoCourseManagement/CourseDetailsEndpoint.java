@@ -33,7 +33,7 @@ public class CourseDetailsEndpoint {
 		//CourseDetailsResponse response  = new CourseDetailsResponse();
 		Course course = courseDetailsService.findById(request.getId());	
 		if(course == null){
-			throw new RuntimeException("Invalid course id "+request.getId());
+			throw new CourseNotFoundException("Invalid course id "+request.getId());
 		}
 		return mapCourseDetails(course);
 
