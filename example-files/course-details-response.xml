@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CourseDetailsResponse xmlns="http://amitbansal.com" xsi:schemaLocation="http://amitbansal.com course-details.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<CourseDetails>
+<id>123</id>
+<name>Spring in 28 minutes</name>
+<description> learn basics of spring</description>
+</CourseDetails>
+</CourseDetailsResponse>
